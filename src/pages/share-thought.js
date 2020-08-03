@@ -12,11 +12,11 @@ export default function ShareThought() {
     await fetch("/api/thoughts", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        message
-      })
+        message,
+      }),
     });
     Router.push("/");
   }
@@ -25,11 +25,11 @@ export default function ShareThought() {
     <Container>
       <Form onSubmit={submit}>
         <Form.Group>
-          <Form.Label>What is in your mind?</Form.Label>
+          <Form.Label>What is on your mind?</Form.Label>
           <Form.Control
             type="text"
             placeholder="Say something"
-            onChange={e => setMessage(e.target.value)}
+            onChange={(e) => setMessage(e.target.value)}
             value={message}
           />
         </Form.Group>

@@ -5,14 +5,14 @@ const next = require("next");
 const session = require("express-session");
 const passport = require("passport");
 const Auth0Strategy = require("passport-auth0");
-const uid = require('uid-safe');
+const uid = require("uid-safe");
 const authRoutes = require("./auth-routes");
 const thoughtsAPI = require("./thoughts-api");
 
 const dev = process.env.NODE_ENV !== "production";
 const app = next({
   dev,
-  dir: "./src"
+  dir: "./src",
 });
 const handle = app.getRequestHandler();
 
@@ -23,10 +23,10 @@ app.prepare().then(() => {
   const sessionConfig = {
     secret: uid.sync(18),
     cookie: {
-      maxAge: 86400 * 1000 // 24 hours in milliseconds
+      maxAge: 86400 * 1000, // 24 hours in milliseconds
     },
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
   };
   server.use(session(sessionConfig));
 
@@ -36,12 +36,14 @@ app.prepare().then(() => {
       domain: process.env.AUTH0_DOMAIN,
       clientID: process.env.AUTH0_CLIENT_ID,
       clientSecret: process.env.AUTH0_CLIENT_SECRET,
-      callbackURL: process.env.AUTH0_CALLBACK_URL
+      callbackURL: process.env.AUTH0_CALLBACK_URL,
     },
-    function(accessToken, refreshToken, extraParams, profile, done) {
+    function (accessToken, refreshToken, extraParams, profile, done) {
       return done(null, profile);
     }
   );
+
+  server.set("view engine", "hbs");
 
   // 4 - configuring Passport
   passport.use(auth0Strategy);
@@ -60,6 +62,17 @@ app.prepare().then(() => {
     if (!req.isAuthenticated()) return res.redirect("/login");
     next();
   };
+
+  // var auth = require("./routes/auth");
+  // var load = require("./routes/load");
+  // var uninstall = require("./routes/uninstall");
+  // var index = require("./routes/index");
+
+  // server.use("/", index);
+  // app.use("/users", users);
+  // server.use("/auth", auth);
+  // server.use("/load", load);
+  // server.use("/uninstall", uninstall);
 
   server.use("/profile", restrictAccess);
   server.use("/share-thought", restrictAccess);

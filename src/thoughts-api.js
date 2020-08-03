@@ -6,8 +6,8 @@ const router = express.Router();
 router.use(bodyParser.json());
 
 const thoughts = [
-  { _id: 123, message: "I love pepperoni pizza!", author: "unknown" },
-  { _id: 456, message: "I'm watching Netflix.", author: "unknown" }
+  // { _id: 123, message: "I love pepperoni pizza!", author: "unknown" },
+  // { _id: 456, message: "I'm watching Netflix.", author: "unknown" }
 ];
 
 router.get("/api/thoughts", (req, res) => {
@@ -25,7 +25,7 @@ router.post("/api/thoughts", ensureAuthenticated, (req, res) => {
   const newThougth = {
     _id: new Date().getTime(),
     message,
-    author: req.user.displayName
+    author: req.user.displayName,
   };
   thoughts.push(newThougth);
   res.send({ message: "Thanks!" });
